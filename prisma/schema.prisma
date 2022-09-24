@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id            String          @id @default(uuid())
+  name          String          @unique
+  username      String
+  password      String
+  cpf           String
+  created_at    DateTime        @default(now())
+  UsersExpenses UsersExpenses[]
+
+  @@map("users")
+}
+
+model Expenses {
+  id             String           @id @default(uuid())
+  description    String
+  created_at     DateTime         @default(now())
+  UsersExpenses  UsersExpenses[]
+  Expenses_Itens Expenses_Itens[]
+
+  @@map("expenses")
+}
+
+model UsersExpenses {
+  id             String           @id @default(uuid())
+  user           Users            @relation(fields: [id_user], references: [id])
+  id_user        String
+  expense        Expenses         @relation(fields: [id_expense], references: [id])
+  id_expense     String
+  created_at     DateTime         @default(now())
+  Expenses_Itens Expenses_Itens[]
+
+  @@unique([id_expense, id_user])
+  @@map("users_expenses")
+}
+
+model Expenses_Itens {
+  id          String        @id @default(uuid())
+  id_user     String
+  user        UsersExpenses @relation(fields: [id_expense, id_user], references: [id_expense, id_user])
+  id_expense  String
+  expense     Expenses      @relation(fields: [id_expense], references: [id])
+  description String
+  date        DateTime      @default(now())
+  amount      Decimal
+  created_at  DateTime      @default(now())
+
+  @@map("expenses_itens")
+}

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "expenses_itens" ALTER COLUMN "date" SET DEFAULT CURRENT_TIMESTAMP;
