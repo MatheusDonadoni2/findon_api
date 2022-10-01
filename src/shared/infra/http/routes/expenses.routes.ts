@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { FindExpenseByIDController } from '../../../../module/expenses/useCases/findExpenseByID/FindExpenseByIDController'
 import { CreateExpensesController } from "../../../../module/expenses/useCases/createExpenses/CreateExpensesController";
 import { CreateItemExpenseController } from "../../../../module/expenses/useCases/createItemExpense/useCase/createItemExpenseController";
-import { ensureAuthenticateCliente } from '../../middlewares/ensereAuthenticate';
+import { ensureAuthenticateClient } from '../../middlewares/ensereAuthenticate';
 
 
 const createExpensesController = new CreateExpensesController();
@@ -14,9 +14,10 @@ const findExpenseByIDController = new FindExpenseByIDController();
 
 const expensesRoutes = Router();
 
-expensesRoutes.post("/", ensureAuthenticateCliente, createExpensesController.handle);
-expensesRoutes.post("/createItensExpense/:id", ensureAuthenticateCliente, createItemExpenseController.handle);
-expensesRoutes.get("/findExpenseByID", ensureAuthenticateCliente, findExpenseByIDController.handle);
+expensesRoutes.post("/", ensureAuthenticateClient, createExpensesController.handle);
+expensesRoutes.post("/createItensExpense/:id", ensureAuthenticateClient, createItemExpenseController.handle);
+//expensesRoutes.get("/findExpenseByID", ensureAuthenticateClient, findExpenseByIDController.handle);
+expensesRoutes.get("/findExpenseByID", ensureAuthenticateClient, findExpenseByIDController.handle);
 
 
 export { expensesRoutes }

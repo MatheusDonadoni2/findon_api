@@ -5,7 +5,7 @@ interface IPayLoad {
     sub: string
 }
 
-export async function ensureAuthenticateCliente(request: Request, response: Response, next: NextFunction) {
+export async function ensureAuthenticateClient(request: Request, response: Response, next: NextFunction) {
     const authHeader = request.headers.authorization;
 
     if (!authHeader) {
