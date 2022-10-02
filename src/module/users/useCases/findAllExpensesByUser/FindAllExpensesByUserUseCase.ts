@@ -3,15 +3,15 @@ import { AppError } from "../../../../shared/errors/AppError";
 
 export class FindAllExpensesByUserUseCase {
     async execute(id_user: string) {
-        const user = await myPrisma.users.findUnique({
-            where: {
-                id: id_user
-            }
-        })
+        // const user = await myPrisma.users.findUnique({
+        //     where: {
+        //         id: id_user
+        //     }
+        // })
 
-        if (!user) {
-            throw new AppError('User not found.')
-        }
+        // if (!user) {
+        //     throw new AppError('User not found.')
+        // }
 
         const all = await myPrisma.users.findMany({
             where: {

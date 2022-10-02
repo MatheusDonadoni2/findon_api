@@ -4,8 +4,8 @@ import { FindAllExpensesByUserUseCase } from "./FindAllExpensesByUserUseCase";
 export class FindAllExpensesByUserContoller {
     async handle(request: Request, response: Response) {
         const findAllExpensesByUserUseCase = new FindAllExpensesByUserUseCase();
-        const { id_user } = request;
-        const result = await findAllExpensesByUserUseCase.execute(id_user);
+        const { id } = request.params;
+        const result = await findAllExpensesByUserUseCase.execute(id);
 
         return response.json(result)
     }

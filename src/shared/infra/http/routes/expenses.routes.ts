@@ -16,8 +16,7 @@ const expensesRoutes = Router();
 
 expensesRoutes.post("/", ensureAuthenticateClient, createExpensesController.handle);
 expensesRoutes.post("/createItensExpense/:id", ensureAuthenticateClient, createItemExpenseController.handle);
-//expensesRoutes.get("/findExpenseByID", ensureAuthenticateClient, findExpenseByIDController.handle);
-expensesRoutes.get("/findExpenseByID", ensureAuthenticateClient, findExpenseByIDController.handle);
+expensesRoutes.get("/find/:id", ensureAuthenticateClient, findExpenseByIDController.handle);
 
 
 export { expensesRoutes }

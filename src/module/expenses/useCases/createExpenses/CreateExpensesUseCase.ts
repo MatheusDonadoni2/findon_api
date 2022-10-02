@@ -1,11 +1,24 @@
 import { myPrisma } from "../../../../database/MyPrismaClient";
 import { ICreateExpenses } from "../../dtos/ICreateExpenses"
 
+import { FindUserByIDUseCase } from "../../../../module/users/useCases/findUserByID/findUserByIDUseCase";
+import { AppError } from "../../../../shared/errors/AppError";
+
 export class CreateExpensesUseCase {
     async execute({ description, id_users_relatitions, itens }: ICreateExpenses) {
-        await myPrisma.$transaction([
+        const findUserByIDUseCase = new FindUserByIDUseCase();
+        const itens_id_user = itens.map((user) => { return user.id_user })
 
-        ])
+        const userRelationsExists = await findUserByIDUseCase.execute(id_users_relatitions);
+        const userRelationsItensExists = await findUserByIDUseCase.execute(itens_id_user);
+
+        if (userRelationsExists.length != id_users_relatitions.length) {
+            throw new AppError("Any of the related users could not be found")
+        };
+
+        if (userRelationsItensExists.length != itens_id_user.length) {
+            throw new AppError("Any of the related itens users could not be found")
+        };
 
         const expense = await myPrisma.expenses.create({
             data: {
