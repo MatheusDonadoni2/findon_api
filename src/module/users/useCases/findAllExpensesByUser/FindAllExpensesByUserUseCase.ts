@@ -1,21 +1,20 @@
 import { myPrisma } from "../../../../database/MyPrismaClient";
 import { AppError } from "../../../../shared/errors/AppError";
+import { FindUserByIDUseCase } from "../findUserByID/findUserByIDUseCase";
+
 
 export class FindAllExpensesByUserUseCase {
     async execute(id_user: string) {
-        // const user = await myPrisma.users.findUnique({
-        //     where: {
-        //         id: id_user
-        //     }
-        // })
+        const findUserByIDUseCase = new FindUserByIDUseCase()
+        const user = findUserByIDUseCase.execute([id_user])
 
-        // if (!user) {
-        //     throw new AppError('User not found.')
-        // }
+        if (!user) {
+            throw new AppError('User not found.')
+        }
 
         const all = await myPrisma.users.findMany({
             where: {
-                id: user.id
+                id: id_user
             },
             select: {
                 id: true,
