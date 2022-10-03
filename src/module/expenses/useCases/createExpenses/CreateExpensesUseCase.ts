@@ -2,28 +2,21 @@ import { myPrisma } from "../../../../database/MyPrismaClient";
 import { ICreateExpenses } from "../../dtos/ICreateExpenses"
 
 import { FindUserByIDUseCase } from "../../../../module/users/useCases/findUserByID/findUserByIDUseCase";
+import { ValidateUsersInformedUseCase } from "./ValidateUsersInformedUseCase";
 import { AppError } from "../../../../shared/errors/AppError";
 import { Users } from "@prisma/client";
 
 export class CreateExpensesUseCase {
     async execute({ description, id_users_relatitions, itens }: ICreateExpenses) {
-        const findUserByIDUseCase = new FindUserByIDUseCase();
         const itens_id_user = itens.map((user) => { return user.id_user })
 
-        const userRelationsExists = await findUserByIDUseCase.execute(id_users_relatitions);
-        const userRelationsItensExists = await findUserByIDUseCase.execute(itens_id_user);
+        const validateUsersInformedUseCase = new ValidateUsersInformedUseCase();
 
-        itens_id_user.forEach((id) => {
-            const result = userRelationsExists.find((user) => user.id === id)
-            if (!result) {
-                throw new AppError("Any of the related itens users could not be found")
-            }
-        })
+        await validateUsersInformedUseCase.execute(id_users_relatitions);
+        await validateUsersInformedUseCase.execute(itens_id_user);
 
 
-        if (userRelationsExists.length != id_users_relatitions.length) {
-            throw new AppError("Any of the related users could not be found")
-        };
+
 
         const expense = await myPrisma.expenses.create({
             data: {
